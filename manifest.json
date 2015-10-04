@@ -14,9 +14,7 @@
    },
    "manifest_version": 2,
    "name": "Alt Viewer plus",
-   "options_page": "options.html",
    "short_name": "Alt Viewer",
-   "permissions": [  "storage", "tabs","http://*/*", "https://*/*" ],
-   "version": "1.0.0",
-    "web_accessible_resources": [ "options.html" ]
+   "permissions": ["storage", "tabs", "http://*/*", "https://*/*" ],
+   "version": "1.0.0"
 }
