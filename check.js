@@ -157,12 +157,10 @@
       e('body')[0].appendChild(r);
       r.innerHTML = h;
       r.onclick = function() {};
-      document.querySelector('.ALT_VIEWER_CLOSE').onclick = function() {
-        var i;
-        i = r.childNodes.length - 1;
-        while (i >= 0) {
-          r.removeChild(r.childNodes[i]);
-          i--;
+      document.querySelector('.ALT_VIEWER_CLOSE').onclick = function() {;
+        var elm = document.querySelector('#ALT_VIEWER_PLUS');
+        if(elm){
+          elm.remove();
         }
       };
       window.scrollTo(0, 0);
@@ -171,8 +169,11 @@
           e.addEventListener('mouseover', (function(event) {
             var filename_ex;
             filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            document.querySelector('[src$="' + filename_ex + '"]').style.border = 'solid 3px #F82F66';
-            document.querySelector('[src$="' + filename_ex + '"]').classList.add('img_blink');
+            var elm = document.querySelector('[src$="' + filename_ex + '"]');
+            if(elm){
+              elm.style.border = 'solid 3px #F82F66';
+              elm.classList.add('img_blink');
+            }
           }), false);
         }
       ]);
@@ -181,8 +182,11 @@
           e.addEventListener('mouseout', (function(event) {
             var filename_ex;
             filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            document.querySelector('[src$="' + filename_ex + '"]').style.border = 'none';
-            document.querySelector('[src$="' + filename_ex + '"]').classList.remove('img_blink');
+            var elm = document.querySelector('[src$="' + filename_ex + '"]');
+            if(elm){
+              elm.style.border = 'none';
+              elm.classList.remove('img_blink');
+            }
           }), false);
         }
       ]);
@@ -191,8 +195,11 @@
           e.addEventListener('mouseover', (function(event) {
             var title;
             title = event.target.innerText;
-            document.querySelector('[title$="' + title + '"]').style.border = 'solid 3px #F82F66';
-            document.querySelector('[title$="' + title + '"]').classList.add('img_blink');
+            var elm = document.querySelector('[title$="' + title + '"]');
+            if(elm){
+              document.querySelector('[title$="' + title + '"]').style.border = 'solid 3px #F82F66';
+              document.querySelector('[title$="' + title + '"]').classList.add('img_blink');
+            }
           }), false);
         }
       ]);
@@ -201,8 +208,11 @@
           e.addEventListener('mouseout', (function(event) {
             var title;
             title = event.target.innerText;
-            document.querySelector('[title$="' + title + '"]').style.border = 'none';
-            document.querySelector('[title$="' + title + '"]').classList.remove('img_blink');
+            var elm = document.querySelector('[title$="' + title + '"]');
+            if(elm){
+              elm.style.border = 'none';
+              elm.classList.remove('img_blink');
+            }
           }), false);
         }
       ]);

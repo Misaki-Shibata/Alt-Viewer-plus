@@ -5,11 +5,11 @@
 
 ### Instructions
 
-手順については、ウィキを参照してください。  
+手順については、サイトを参照してください。  
 https://github.com/ocodia/Check-My-Links/wiki
 
 あなたはここで、この拡張機能のパッケージ版をインストールすることができます。  
-https://chrome.google.com/webstore/detail/...
+https://chrome.google.com/webstore/detail/alt-viewer-plus/ffjajikffikfodkkflfkmmgjeifkphjb
 
 ### Issues
 

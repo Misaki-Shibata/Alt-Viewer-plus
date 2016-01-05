@@ -16,5 +16,5 @@
    "name": "Alt Viewer plus",
    "short_name": "Alt Viewer",
    "permissions": ["storage", "tabs", "http://*/*", "https://*/*" ],
-   "version": "1.0.0"
+   "version": "1.0.1"
 }
