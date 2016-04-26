@@ -70,20 +70,30 @@ chrome.extension.onMessage.addListener (request, sender) ->
     tblcss = undefined
     tdlcss = undefined
     tdrcss = undefined
-    rid = 'ALT_VIEWER_PLUS'
+    rid = 'HREF_VIEWER_PLUS'
 
     e = (t) ->
       document.getElementsByTagName t
 
     a = (o, a) ->
       att = o.getAttribute(a)
-      if a == 'alt' and att == null
-        return 'alt未設定'
+      if a == 'href' and att == null
+        return 'href未設定'
       att
+
+別ドメイン
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeNpi/P//PwM6OHHiBIogIzZF6IpZ0HVZWFgwwhSA2CCaBVkCKskPpB4iizEcP378P8hKEAay+YH4A4wPwyiKkDGyOBMDEYAoRSzYwgUdAAQYAP8bVoFHLptvAAAAAElFTkSuQmCC
+_blank
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAALCAYAAABLcGxfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFVJREFUeNpi/P//PwMMnDhxAsHBDgSYGEgELOgCFhYWjNgUAm3/ANZAhDNQAMhJH0Fuw2UyNg0MpNpAmacJ+YkFXwhBQ0YeKP6RYid9AJpGlAaAAAMAOG4bvvKWBakAAAAASUVORK5CYII=
+_blank & 別ドメイン
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAGpJREFUeNp8UMENwCAIRMPfjsP+H1ijG5QJqCSaIKG9RBHvxINmZiAiAwAe+AGGsxLRVYlmIUPf8mXM5+Pmsa/cK+kmNhnRv77KYkwCb+quKmLyo8vG4S8LR27kADObz7JakcNqJBVeAQYAN3JErFxAf4sAAAAASUVORK5CYII=
+
+リンク
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODRCMzY0QjUwM0I5MTFFNjhERERCOUY2QTA3NTkzQjAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODRCMzY0QjYwM0I5MTFFNjhERERCOUY2QTA3NTkzQjAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGNEQ4MzgwODAzQjExMUU2OEREREI5RjZBMDc1OTNCMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4NEIzNjRCNDAzQjkxMUU2OEREREI5RjZBMDc1OTNCMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhzapaMAAADmSURBVHjalFMLEcIwDO3tEFAJlYADigImoTjAATgAB9QBSMABQ8HqgKGgpCO5y4V0jNy969rs5Z8m52xmIAD6/JFyHgG26OaQY9blXoz8Qz4APKAFDPQ2RT4xclBSGtNpTF0cnltAFLpE/ywmDLRoxAJ6JK1R5/F8aGFf2H0JeGK4SYQ/plYrmBPkAe+cHHkboyiYRnaSTAZ2SrWTIJOjK6ZpuIHE+kyKG76T52q7DfPuKyOc0bNqoMzBS/SdJADOou/fwiauFG0DWAH2WsFqKZSt6ioLE38tG31YjIQK2inzr+ItwACVV8TFxCPiqAAAAABJRU5ErkJggg==
 
     if document.getElementById(rid)
       return
-    i = e('img')
+    i = e('a')
     if i.length <= 0
       return
     r = document.createElement('div')
@@ -96,51 +106,12 @@ chrome.extension.onMessage.addListener (request, sender) ->
     h = '<style>\n@-webkit-keyframes anime1 {\n0% {opacity: .2;}\n100% {opacity: 1;}\n}\n.img_blink{-webkit-animation: anime1 0.5s ease 0s infinite alternate;}\n</style>'
     h += '<table' + tblcss + ' class="ATT_VIEWER_TABLE">'
     j = 0
-    #/ meta
-    h += '<tr><td colspan="2" style="padding:1em 0 0 1em;border-bottom:solid #fff 2px;text-align:left;color:#fff;white-space:pre-wrap;max-width:500px;line-height:1;font-size: 12px;">'
-    h += '<span class="ALT_VIEWER_CLOSE" style="background-color: hsla(0,100%,100%,1);color: #000;position: absolute;right: 0;top: 0;padding: 0.5em 1em;">Close✕</span>'
-    matas = ''
-    Array::forEach.apply document.querySelectorAll('title, meta, h1'), [ (e, i, a) ->
-      `var i`
-      out = e.outerHTML.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n'
-      inn = e.innerHTML
-      out.replace inn, '<span style="color:#F0EA30;">' + inn + '</span>'
-      attrs = e.attributes
-      i = attrs.length - 1
-      while i >= 0
-        # h += attrs[i].name + "->" + attrs[i].value + '\n';
-        out = out.replace(new RegExp(attrs[i].name, 'g'), '<span style="color:#70BE47;">' + attrs[i].name + '</span>').replace(new RegExp(attrs[i].value, 'g'), '<span style="color:#F55A21;">' + attrs[i].value + '</span>')
-        i--
-      matas += out + '\n'
-      return
- ]
-    meta_txt = matas
-    h += meta_txt
-    h += '</td></tr>'
-    #/ meta
+
     while j < i.length
       h += if j % 252 == 0 then '<tr>' else '<tr>'
-      h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>'
+      h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=\'\'></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>'
       j++
-    #/// title
-    titles = ''
-    Array::forEach.apply document.querySelectorAll('[title]'), [ (e, i, a) ->
-      `var i`
-      out = e.outerHTML.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n'
-      attrs = e.attributes
-      i = attrs.length - 1
-      while i >= 0
-        if attrs[i].name == 'title'
-          title = attrs[i].value
-          newout = out.replace('title', '<span style="color:#70BE47;">title</span>').replace(title, '<span style="color:#F55A21;">' + title + '</span>')
-          h += '<tr><td' + tdlcss + ' style=\'max-width: 350px;vertical-align:top;\'><span style=\'max-width: 350px;display: inline-block;line-height:1;font-size: 12px;color: #fff;text-align: left;padding:.5em 0 0 .5em;overflow: hidden;\'>' + newout + '</span></td>'
-          h += '<td class="ALT_VIEWER_TITLE" style="padding:1em 0 1em 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F55A21;width:250px;overflow: hidden;vertical-align: top;">' + title + '</td></tr>'
-        i--
-      titles += out + '\n'
-      return
- ]
-    # console.log(titles);
-    #/// /title
+
     h += '</table>'
     e('body')[0].appendChild r
     r.innerHTML = h
@@ -183,7 +154,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
 
     # 閉じる
 
-    document.querySelector('.ALT_VIEWER_CLOSE').onclick = ->
+    document.querySelector('.HREF_VIEWER_CLOSE').onclick = ->
       `var i`
       i = r.childNodes.length - 1
       while i >= 0
@@ -224,7 +195,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
       return
  ]
     # hoverした時のtitle
-    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .ALT_VIEWER_TITLE'), [ (e, i, a) ->
+    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_TITLE'), [ (e, i, a) ->
       e.addEventListener 'mouseover', ((event) ->
         # console.log("mouseover", event.target.src);
         title = event.target.innerText
@@ -234,7 +205,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
       ), false
       return
  ]
-    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .ALT_VIEWER_TITLE'), [ (e, i, a) ->
+    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_TITLE'), [ (e, i, a) ->
       e.addEventListener 'mouseout', ((event) ->
         # console.log("mouseout", event.target.title);
         title = event.target.innerText

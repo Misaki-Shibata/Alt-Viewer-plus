@@ -45,7 +45,7 @@
     rpBox = void 0;
     removeDOMElement('ALP_ReportBox');
     (function(pg) {
-      var a, blacklist, blacklisted, cacheType, checkType, e, h, i, j, matas, meta_txt, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss, titles;
+      var a, blacklist, blacklisted, cacheType, checkType, e, h, i, j, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss;
       blacklist = request.bl;
       blacklisted = void 0;
       cacheType = request.ca;
@@ -76,22 +76,22 @@
       tblcss = void 0;
       tdlcss = void 0;
       tdrcss = void 0;
-      rid = 'ALT_VIEWER_PLUS';
+      rid = 'HREF_VIEWER_PLUS';
       e = function(t) {
         return document.getElementsByTagName(t);
       };
       a = function(o, a) {
         var att;
         att = o.getAttribute(a);
-        if (a === 'alt' && att === null) {
-          return 'alt未設定';
+        if (a === 'href' && att === null) {
+          return 'href未設定';
         }
         return att;
       };
       if (document.getElementById(rid)) {
         return;
       }
-      i = e('img');
+      i = e('a');
       if (i.length <= 0) {
         return;
       }
@@ -105,53 +105,11 @@
       h = '<style>\n@-webkit-keyframes anime1 {\n0% {opacity: .2;}\n100% {opacity: 1;}\n}\n.img_blink{-webkit-animation: anime1 0.5s ease 0s infinite alternate;}\n</style>';
       h += '<table' + tblcss + ' class="ATT_VIEWER_TABLE">';
       j = 0;
-      h += '<tr><td colspan="2" style="padding:1em 0 0 1em;border-bottom:solid #fff 2px;text-align:left;color:#fff;white-space:pre-wrap;max-width:500px;line-height:1;font-size: 12px;">';
-      h += '<span class="ALT_VIEWER_CLOSE" style="background-color: hsla(0,100%,100%,1);color: #000;position: absolute;right: 0;top: 0;padding: 0.5em 1em;">Close✕</span>';
-      matas = '';
-      Array.prototype.forEach.apply(document.querySelectorAll('title, meta, h1'), [
-        function(e, i, a) {
-          var i;
-          var attrs, inn, out;
-          out = e.outerHTML.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
-          inn = e.innerHTML;
-          out.replace(inn, '<span style="color:#F0EA30;">' + inn + '</span>');
-          attrs = e.attributes;
-          i = attrs.length - 1;
-          while (i >= 0) {
-            out = out.replace(new RegExp(attrs[i].name, 'g'), '<span style="color:#70BE47;">' + attrs[i].name + '</span>').replace(new RegExp(attrs[i].value, 'g'), '<span style="color:#F55A21;">' + attrs[i].value + '</span>');
-            i--;
-          }
-          matas += out + '\n';
-        }
-      ]);
-      meta_txt = matas;
-      h += meta_txt;
-      h += '</td></tr>';
       while (j < i.length) {
         h += j % 252 === 0 ? '<tr>' : '<tr>';
-        h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>';
+        h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>';
         j++;
       }
-      titles = '';
-      Array.prototype.forEach.apply(document.querySelectorAll('[title]'), [
-        function(e, i, a) {
-          var i;
-          var attrs, newout, out, title;
-          out = e.outerHTML.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '\n';
-          attrs = e.attributes;
-          i = attrs.length - 1;
-          while (i >= 0) {
-            if (attrs[i].name === 'title') {
-              title = attrs[i].value;
-              newout = out.replace('title', '<span style="color:#70BE47;">title</span>').replace(title, '<span style="color:#F55A21;">' + title + '</span>');
-              h += '<tr><td' + tdlcss + ' style=\'max-width: 350px;vertical-align:top;\'><span style=\'max-width: 350px;display: inline-block;line-height:1;font-size: 12px;color: #fff;text-align: left;padding:.5em 0 0 .5em;overflow: hidden;\'>' + newout + '</span></td>';
-              h += '<td class="ALT_VIEWER_TITLE" style="padding:1em 0 1em 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F55A21;width:250px;overflow: hidden;vertical-align: top;">' + title + '</td></tr>';
-            }
-            i--;
-          }
-          titles += out + '\n';
-        }
-      ]);
       h += '</table>';
       e('body')[0].appendChild(r);
       r.innerHTML = h;
@@ -174,7 +132,7 @@
         }), 10);
       };
       r.onclick = function() {};
-      document.querySelector('.ALT_VIEWER_CLOSE').onclick = function() {
+      document.querySelector('.HREF_VIEWER_CLOSE').onclick = function() {
         var i;
         i = r.childNodes.length - 1;
         while (i >= 0) {
@@ -213,7 +171,7 @@
           }), false);
         }
       ]);
-      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .ALT_VIEWER_TITLE'), [
+      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_TITLE'), [
         function(e, i, a) {
           e.addEventListener('mouseover', (function(event) {
             var title;
@@ -223,7 +181,7 @@
           }), false);
         }
       ]);
-      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .ALT_VIEWER_TITLE'), [
+      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_TITLE'), [
         function(e, i, a) {
           e.addEventListener('mouseout', (function(event) {
             var title;
