@@ -22,7 +22,7 @@ onRequest = (request, sender, callback) ->
         # do not use cache
         check request.url, callback
   true
-
+  
 check = (url, callback) ->
   XMLHttpTimeout = null
   xhr = new XMLHttpRequest
