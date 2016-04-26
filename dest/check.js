@@ -81,12 +81,12 @@
         return document.getElementsByTagName(t);
       };
       a = function(o, a) {
-        var att;
-        att = o.getAttribute(a);
-        if (a === 'href' && att === null) {
+        var prop;
+        prop = o.href;
+        if (a === 'href' && prop === null) {
           return 'href未設定';
         }
-        return att;
+        return prop;
       };
       if (document.getElementById(rid)) {
         return;
@@ -96,18 +96,29 @@
         return;
       }
       r = document.createElement('div');
-      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;';
+      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;width: 400px;';
       tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\'';
       tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\'';
-      tdrcss = ' style=\'padding:0 0 0 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\'';
+      tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\'';
       r.id = rid;
       r.style.cssText = rcss;
-      h = '<style>\n@-webkit-keyframes anime1 {\n0% {opacity: .2;}\n100% {opacity: 1;}\n}\n.img_blink{-webkit-animation: anime1 0.5s ease 0s infinite alternate;}\n</style>';
+      h = '<style>\n';
+      h += '@-webkit-keyframes anime1 {\n0% {opacity: .2;}\n100% {opacity: 1;}\n}\n.img_blink{-webkit-animation: anime1 0.5s ease 0s infinite alternate;}\n';
+      h += '.icon_href_link{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODRCMzY0QjUwM0I5MTFFNjhERERCOUY2QTA3NTkzQjAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODRCMzY0QjYwM0I5MTFFNjhERERCOUY2QTA3NTkzQjAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGNEQ4MzgwODAzQjExMUU2OEREREI5RjZBMDc1OTNCMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4NEIzNjRCNDAzQjkxMUU2OEREREI5RjZBMDc1OTNCMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhzapaMAAADmSURBVHjalFMLEcIwDO3tEFAJlYADigImoTjAATgAB9QBSMABQ8HqgKGgpCO5y4V0jNy969rs5Z8m52xmIAD6/JFyHgG26OaQY9blXoz8Qz4APKAFDPQ2RT4xclBSGtNpTF0cnltAFLpE/ywmDLRoxAJ6JK1R5/F8aGFf2H0JeGK4SYQ/plYrmBPkAe+cHHkboyiYRnaSTAZ2SrWTIJOjK6ZpuIHE+kyKG76T52q7DfPuKyOc0bNqoMzBS/SdJADOou/fwiauFG0DWAH2WsFqKZSt6ioLE38tG31YjIQK2inzr+ItwACVV8TFxCPiqAAAAABJRU5ErkJggg==) no-repeat;\n';
+      h += 'width: 10px;\n';
+      h += 'height: 10px;\n';
+      h += 'content: \".\";\n';
+      h += 'color: transparent;\n';
+      h += 'background-size: initial;\n';
+      h += 'padding: 0 5px 0 12px;\n';
+      h += 'margin-left: 5px;\n';
+      h += '}\n';
+      h += '</style>';
       h += '<table' + tblcss + ' class="ATT_VIEWER_TABLE">';
       j = 0;
       while (j < i.length) {
         h += j % 252 === 0 ? '<tr>' : '<tr>';
-        h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>';
+        h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>';
         j++;
       }
       h += '</table>';
