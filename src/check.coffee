@@ -87,7 +87,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
     if i.length <= 0
       return
     r = document.createElement('div')
-    rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:999;max-height:100%;overflow: auto;'
+    rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;'
     tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\''
     tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\''
     tdrcss = ' style=\'padding:0 0 0 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\''
@@ -120,7 +120,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
     #/ meta
     while j < i.length
       h += if j % 252 == 0 then '<tr>' else '<tr>'
-      h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>'
+      h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>'
       j++
     #/// title
     titles = ''
@@ -144,6 +144,38 @@ chrome.extension.onMessage.addListener (request, sender) ->
     h += '</table>'
     e('body')[0].appendChild r
     r.innerHTML = h
+    
+    # jQuery
+    # if !window.jQuery
+    #   console.log "load jquery"
+    #   url='https://code.jquery.com/jquery-1.12.3.min.js'
+    #   z=document.createElement('script')
+    #   z.integrity='sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ='
+    #   z.language='javascript'
+    #   z.type='text/javascript'
+    #   z.charset='utf-8'
+    #   z.src=url
+    #   document.body.appendChild(z)
+    # else
+    #   console.log "not jquery"
+    
+    scrollTo = (to, duration) ->
+      if duration < 0
+        return
+      scrollTop = document.body.scrollTop + document.documentElement.scrollTop
+      difference = to - scrollTop
+      perTick = difference / duration * 10
+      setTimeout (->
+        scrollTop = scrollTop + perTick
+        document.body.scrollTop = scrollTop
+        document.documentElement.scrollTop = scrollTop
+        if scrollTop == to
+          return
+        scrollTo to, duration - 10
+        return
+      ), 10
+      return
+    
 
     r.onclick = ->
       # this.parentNode.removeChild(this);
@@ -165,9 +197,16 @@ chrome.extension.onMessage.addListener (request, sender) ->
       e.addEventListener 'mouseover', ((event) ->
         # console.log("mouseover", event.target.src);
         filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1]
-        document.querySelector('[src$="' + filename_ex + '"]').style.border = 'solid 3px #F82F66'
-        # document.querySelector('[src$="'+filename_ex+'"]').style.boxSizing ="border-box";
-        document.querySelector('[src$="' + filename_ex + '"]').classList.add 'img_blink'
+        # elm = document.querySelector("[src$=\"" + filename_ex + "\"]")
+        elm = document.querySelector("[src*=\"" + filename_ex + "\"]") # ?ありの画像が処理出来ない
+        console.log elm
+        if elm
+          elm.style.border = "solid 3px #F82F66"
+          elm.classList.add "img_blink"
+          # アニメーション
+          offsetTop = 50
+          top = elm.getBoundingClientRect().top + window.scrollY - offsetTop
+          scrollTo(top, 300)
         return
       ), false
       return
@@ -176,10 +215,11 @@ chrome.extension.onMessage.addListener (request, sender) ->
       e.addEventListener 'mouseout', ((event) ->
         # console.log("mouseout", event.target.src);
         filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1]
-        document.querySelector('[src$="' + filename_ex + '"]').style.border = 'none'
-        # document.querySelector('[src$="'+filename_ex+'"]').style.boxSizing ="content-box";
-        document.querySelector('[src$="' + filename_ex + '"]').classList.remove 'img_blink'
-        return
+        # elm = document.querySelector("[src$=\"" + filename_ex + "\"]")
+        elm = document.querySelector("[src*=\"" + filename_ex + "\"]")
+        if elm
+          elm.style.border = 'none'
+          elm.classList.remove 'img_blink'
       ), false
       return
  ]

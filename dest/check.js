@@ -45,7 +45,7 @@
     rpBox = void 0;
     removeDOMElement('ALP_ReportBox');
     (function(pg) {
-      var a, blacklist, blacklisted, cacheType, checkType, e, h, i, j, matas, meta_txt, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, tblcss, tdlcss, tdrcss, titles;
+      var a, blacklist, blacklisted, cacheType, checkType, e, h, i, j, matas, meta_txt, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss, titles;
       blacklist = request.bl;
       blacklisted = void 0;
       cacheType = request.ca;
@@ -96,7 +96,7 @@
         return;
       }
       r = document.createElement('div');
-      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:999;max-height:100%;overflow: auto;';
+      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;';
       tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\'';
       tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\'';
       tdrcss = ' style=\'padding:0 0 0 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\'';
@@ -129,7 +129,7 @@
       h += '</td></tr>';
       while (j < i.length) {
         h += j % 252 === 0 ? '<tr>' : '<tr>';
-        h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>';
+        h += '<td' + tdlcss + '><img style=\'max-width: 350px;vertical-align:bottom; margin: 10px 0 10px 10px; box-sizing: border-box;\' src=' + a(i[j], 'src') + '></td><td' + tdrcss + '>' + a(i[j], 'alt') + '</td></tr>';
         j++;
       }
       titles = '';
@@ -155,6 +155,24 @@
       h += '</table>';
       e('body')[0].appendChild(r);
       r.innerHTML = h;
+      scrollTo = function(to, duration) {
+        var difference, perTick, scrollTop;
+        if (duration < 0) {
+          return;
+        }
+        scrollTop = document.body.scrollTop + document.documentElement.scrollTop;
+        difference = to - scrollTop;
+        perTick = difference / duration * 10;
+        setTimeout((function() {
+          scrollTop = scrollTop + perTick;
+          document.body.scrollTop = scrollTop;
+          document.documentElement.scrollTop = scrollTop;
+          if (scrollTop === to) {
+            return;
+          }
+          scrollTo(to, duration - 10);
+        }), 10);
+      };
       r.onclick = function() {};
       document.querySelector('.ALT_VIEWER_CLOSE').onclick = function() {
         var i;
@@ -168,20 +186,30 @@
       Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE img'), [
         function(e, i, a) {
           e.addEventListener('mouseover', (function(event) {
-            var filename_ex;
+            var elm, filename_ex, offsetTop, top;
             filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            document.querySelector('[src$="' + filename_ex + '"]').style.border = 'solid 3px #F82F66';
-            document.querySelector('[src$="' + filename_ex + '"]').classList.add('img_blink');
+            elm = document.querySelector("[src*=\"" + filename_ex + "\"]");
+            console.log(elm);
+            if (elm) {
+              elm.style.border = "solid 3px #F82F66";
+              elm.classList.add("img_blink");
+              offsetTop = 50;
+              top = elm.getBoundingClientRect().top + window.scrollY - offsetTop;
+              scrollTo(top, 300);
+            }
           }), false);
         }
       ]);
       Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE img'), [
         function(e, i, a) {
           e.addEventListener('mouseout', (function(event) {
-            var filename_ex;
+            var elm, filename_ex;
             filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            document.querySelector('[src$="' + filename_ex + '"]').style.border = 'none';
-            document.querySelector('[src$="' + filename_ex + '"]').classList.remove('img_blink');
+            elm = document.querySelector("[src*=\"" + filename_ex + "\"]");
+            if (elm) {
+              elm.style.border = 'none';
+              return elm.classList.remove('img_blink');
+            }
           }), false);
         }
       ]);
