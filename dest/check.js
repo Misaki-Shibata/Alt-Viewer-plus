@@ -45,7 +45,7 @@
     rpBox = void 0;
     removeDOMElement('ALP_ReportBox');
     (function(pg) {
-      var a, ah, blacklist, blacklisted, cacheType, checkType, e, h, i, j, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss;
+      var a, ah, blacklist, blacklisted, cacheType, checkType, e, fullURL, h, hostname, hostname2, i, j, parser, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss, tdrcssG, tdrcssO;
       blacklist = request.bl;
       blacklisted = void 0;
       cacheType = request.ca;
@@ -77,6 +77,8 @@
       tblcss = void 0;
       tdlcss = void 0;
       tdrcss = void 0;
+      tdrcssO = void 0;
+      tdrcssG = void 0;
       rid = 'HREF_VIEWER_PLUS';
       e = function(t) {
         return document.getElementsByTagName(t);
@@ -109,6 +111,8 @@
       tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\'';
       tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\'';
       tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;font-size:14px;\'';
+      tdrcssO = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#FF9624;width:250px;font-size:14px;\'';
+      tdrcssG = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#4ea30a;width:250px;font-size:14px;\'';
       r.id = rid;
       r.style.cssText = rcss;
       h = '<style>\n';
@@ -128,11 +132,29 @@
       h += '<span class="HREF_VIEWER_CLOSE" style="background-color: hsla(0,100%,100%,1);color: #000;position: absolute;right: 0;top: 0;padding: 0.5em 1em;">Close✕</span>';
       h += '</td></tr>';
       j = 0;
+      parser = document.createElement('a');
+      parser.href = location.href;
+      hostname = parser.hostname;
       while (j < i.length) {
         h += j % 252 === 0 ? '<tr>' : '<tr>';
-        h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"';
-        h += ah(i[j], 'href') + '\">';
-        h += a(i[j], 'href') + '</span></td></tr>';
+        fullURL = a(i[j], 'href');
+        if (fullURL.match(new RegExp(hostname))) {
+          parser.href = fullURL;
+          hostname2 = parser.hostname;
+          if (hostname2 === hostname) {
+            h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"';
+            h += ah(i[j], 'href') + '\">';
+            h += a(i[j], 'href') + '</span></td></tr>';
+          } else {
+            h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcssO + '><span class=\"HREF_VIEWER_LINK\" data-href=\"';
+            h += ah(i[j], 'href') + '\">';
+            h += a(i[j], 'href') + '</span></td></tr>';
+          }
+        } else {
+          h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcssG + '><span class=\"HREF_VIEWER_LINK\" data-href=\"';
+          h += ah(i[j], 'href') + '\">';
+          h += a(i[j], 'href') + '</span></td></tr>';
+        }
         j++;
       }
       h += '</table>';
@@ -166,15 +188,12 @@
         }
       };
       window.scrollTo(0, 0);
-      console.log('bbbbb');
       Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [
         function(e, i, a) {
-          console.log('eeee');
           e.addEventListener('mouseover', (function(event) {
             var elm, filename_ex, offsetTop, top;
             filename_ex = event.target.getAttribute('data-href');
             elm = document.querySelector("[href*=\"" + filename_ex + "\"]");
-            console.log(elm);
             if (elm) {
               elm.style.border = "solid 3px #F82F66";
               elm.classList.add("img_blink");
@@ -185,12 +204,12 @@
           }), false);
         }
       ]);
-      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE img'), [
+      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [
         function(e, i, a) {
           e.addEventListener('mouseout', (function(event) {
             var elm, filename_ex;
-            filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            elm = document.querySelector("[src*=\"" + filename_ex + "\"]");
+            filename_ex = event.target.getAttribute('data-href');
+            elm = document.querySelector("[href*=\"" + filename_ex + "\"]");
             if (elm) {
               elm.style.border = 'none';
               return elm.classList.remove('img_blink');

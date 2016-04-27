@@ -71,8 +71,10 @@ chrome.extension.onMessage.addListener (request, sender) ->
     tblcss = undefined
     tdlcss = undefined
     tdrcss = undefined
+    tdrcssO= undefined
+    tdrcssG= undefined
     rid = 'HREF_VIEWER_PLUS'
-
+    
     e = (t) ->
       document.getElementsByTagName t
 
@@ -111,6 +113,9 @@ chrome.extension.onMessage.addListener (request, sender) ->
     tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\''
     tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\''
     tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;font-size:14px;\''
+    tdrcssO= ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#FF9624;width:250px;font-size:14px;\''
+    tdrcssG= ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#4ea30a;width:250px;font-size:14px;\''
+    
     r.id = rid
     r.style.cssText = rcss
     h = '<style>\n'
@@ -132,12 +137,32 @@ chrome.extension.onMessage.addListener (request, sender) ->
     h += '</td></tr>'
 
     j = 0
+    
+    parser = document.createElement('a')
+    parser.href = location.href;
+    hostname = parser.hostname
 
     while j < i.length
       h += if j % 252 == 0 then '<tr>' else '<tr>'
-      h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"'
-      h += ah(i[j],'href') + '\">'
-      h += a(i[j], 'href') + '</span></td></tr>'
+      
+      fullURL = a(i[j], 'href')
+      if(fullURL.match(new RegExp(hostname)))
+        parser.href = fullURL;
+        hostname2 = parser.hostname
+        if(hostname2 == hostname)
+          h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"'
+          h += ah(i[j],'href') + '\">'
+          h += a(i[j], 'href') + '</span></td></tr>'
+        else
+          # サブドメイン
+          h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcssO + '><span class=\"HREF_VIEWER_LINK\" data-href=\"'
+          h += ah(i[j],'href') + '\">'
+          h += a(i[j], 'href') + '</span></td></tr>'
+      else
+        # 外部サイト
+        h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcssG + '><span class=\"HREF_VIEWER_LINK\" data-href=\"'
+        h += ah(i[j],'href') + '\">'
+        h += a(i[j], 'href') + '</span></td></tr>'
       j++
 
     h += '</table>'
@@ -192,15 +217,12 @@ chrome.extension.onMessage.addListener (request, sender) ->
 
     window.scrollTo 0, 0
     # hoverした画像にボーダー
-    console.log('bbbbb')
     Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [ (e, i, a) ->
-      console.log('eeee')
       e.addEventListener 'mouseover', ((event) ->
         filename_ex = event.target.getAttribute('data-href')
         #filename_ex = event.target.href.match('.+/(.+?)([?#;].*)?$')[1]
         # elm = document.querySelector("[src$=\"" + filename_ex + "\"]")
         elm = document.querySelector("[href*=\"" + filename_ex + "\"]") # ?ありの画像が処理出来ない
-        console.log elm
         if elm
           elm.style.border = "solid 3px #F82F66"
           elm.classList.add "img_blink"
@@ -212,12 +234,13 @@ chrome.extension.onMessage.addListener (request, sender) ->
       ), false
       return
  ]
-    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE img'), [ (e, i, a) ->
+    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [ (e, i, a) ->
       e.addEventListener 'mouseout', ((event) ->
         # console.log("mouseout", event.target.src);
-        filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1]
+        filename_ex = event.target.getAttribute('data-href')
         # elm = document.querySelector("[src$=\"" + filename_ex + "\"]")
-        elm = document.querySelector("[src*=\"" + filename_ex + "\"]")
+        elm = document.querySelector("[href*=\"" + filename_ex + "\"]")
+        # elm = document.querySelector("a")
         if elm
           elm.style.border = 'none'
           elm.classList.remove 'img_blink'
