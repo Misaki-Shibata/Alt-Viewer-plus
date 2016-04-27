@@ -45,7 +45,7 @@
     rpBox = void 0;
     removeDOMElement('ALP_ReportBox');
     (function(pg) {
-      var a, blacklist, blacklisted, cacheType, checkType, e, h, i, j, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss;
+      var a, ah, blacklist, blacklisted, cacheType, checkType, e, h, i, j, r, rbClose, rbHeader, rbSettings, rcss, reportBox, reportStyle, rid, scrollTo, tblcss, tdlcss, tdrcss;
       blacklist = request.bl;
       blacklisted = void 0;
       cacheType = request.ca;
@@ -66,6 +66,7 @@
       document.getElementsByTagName('body')[0].appendChild(reportBox);
       rpBox = document.getElementById('ALP_ReportBox');
       a = void 0;
+      ah = void 0;
       e = void 0;
       h = void 0;
       i = void 0;
@@ -88,6 +89,14 @@
         }
         return prop;
       };
+      ah = function(o, a) {
+        var att;
+        att = o.getAttribute(a);
+        if (a === 'href' && att === null) {
+          return 'alt未設定';
+        }
+        return att;
+      };
       if (document.getElementById(rid)) {
         return;
       }
@@ -96,10 +105,10 @@
         return;
       }
       r = document.createElement('div');
-      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;width: 400px;';
+      rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;max-width:400px;';
       tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\'';
       tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\'';
-      tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\'';
+      tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;font-size:14px;\'';
       r.id = rid;
       r.style.cssText = rcss;
       h = '<style>\n';
@@ -109,16 +118,21 @@
       h += 'height: 10px;\n';
       h += 'content: \".\";\n';
       h += 'color: transparent;\n';
-      h += 'background-size: initial;\n';
+      h += 'background-size: contain;\n';
       h += 'padding: 0 5px 0 12px;\n';
       h += 'margin-left: 5px;\n';
       h += '}\n';
       h += '</style>';
       h += '<table' + tblcss + ' class="ATT_VIEWER_TABLE">';
+      h += '<tr><td colspan="2" style="padding:1em 0 0 1em;border-bottom:solid #fff 2px;text-align:left;color:#fff;white-space:pre-wrap;max-width:500px;line-height:1;font-size: 12px;">';
+      h += '<span class="HREF_VIEWER_CLOSE" style="background-color: hsla(0,100%,100%,1);color: #000;position: absolute;right: 0;top: 0;padding: 0.5em 1em;">Close✕</span>';
+      h += '</td></tr>';
       j = 0;
       while (j < i.length) {
         h += j % 252 === 0 ? '<tr>' : '<tr>';
-        h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>';
+        h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"';
+        h += ah(i[j], 'href') + '\">';
+        h += a(i[j], 'href') + '</span></td></tr>';
         j++;
       }
       h += '</table>';
@@ -152,12 +166,14 @@
         }
       };
       window.scrollTo(0, 0);
-      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE img'), [
+      console.log('bbbbb');
+      Array.prototype.forEach.apply(document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [
         function(e, i, a) {
+          console.log('eeee');
           e.addEventListener('mouseover', (function(event) {
             var elm, filename_ex, offsetTop, top;
-            filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1];
-            elm = document.querySelector("[src*=\"" + filename_ex + "\"]");
+            filename_ex = event.target.getAttribute('data-href');
+            elm = document.querySelector("[href*=\"" + filename_ex + "\"]");
             console.log(elm);
             if (elm) {
               elm.style.border = "solid 3px #F82F66";

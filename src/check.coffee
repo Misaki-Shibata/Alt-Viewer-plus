@@ -60,6 +60,7 @@ chrome.extension.onMessage.addListener (request, sender) ->
     rpBox = document.getElementById('ALP_ReportBox')
     #////////
     a = undefined
+    ah = undefined
     e = undefined
     h = undefined
     i = undefined
@@ -75,12 +76,20 @@ chrome.extension.onMessage.addListener (request, sender) ->
     e = (t) ->
       document.getElementsByTagName t
 
+    # https?://で始まるの形式
     a = (o, a) ->
       # $().prop('href')のnativeコード
       prop = o.href
       if a == 'href' and prop == null
         return 'href未設定'
       prop
+
+    # 記述のまま
+    ah = (o, a) ->
+      att = o.getAttribute(a)
+      if a == 'href' and att == null
+        return 'alt未設定'
+      att
 
       #別ドメイン
       #data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeNpi/P//PwM6OHHiBIogIzZF6IpZ0HVZWFgwwhSA2CCaBVkCKskPpB4iizEcP378P8hKEAay+YH4A4wPwyiKkDGyOBMDEYAoRSzYwgUdAAQYAP8bVoFHLptvAAAAAElFTkSuQmCC
@@ -98,10 +107,10 @@ chrome.extension.onMessage.addListener (request, sender) ->
     if i.length <= 0
       return
     r = document.createElement('div')
-    rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;width: 400px;'
+    rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;max-width:400px;'
     tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\''
     tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\''
-    tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\''
+    tdrcss = ' style=\'padding:0 0 0 .5em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;font-size:14px;\''
     r.id = rid
     r.style.cssText = rcss
     h = '<style>\n'
@@ -111,17 +120,24 @@ chrome.extension.onMessage.addListener (request, sender) ->
     h += 'height: 10px;\n'
     h += 'content: \".\";\n'
     h += 'color: transparent;\n'
-    h += 'background-size: initial;\n'
+    h += 'background-size: contain;\n'
     h += 'padding: 0 5px 0 12px;\n'
     h += 'margin-left: 5px;\n'
     h += '}\n'
     h += '</style>'
     h += '<table' + tblcss + ' class="ATT_VIEWER_TABLE">'
+
+    h += '<tr><td colspan="2" style="padding:1em 0 0 1em;border-bottom:solid #fff 2px;text-align:left;color:#fff;white-space:pre-wrap;max-width:500px;line-height:1;font-size: 12px;">'
+    h += '<span class="HREF_VIEWER_CLOSE" style="background-color: hsla(0,100%,100%,1);color: #000;position: absolute;right: 0;top: 0;padding: 0.5em 1em;">Close✕</span>'
+    h += '</td></tr>'
+
     j = 0
 
     while j < i.length
       h += if j % 252 == 0 then '<tr>' else '<tr>'
-      h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '>' + a(i[j], 'href') + '</td></tr>'
+      h += '<td' + tdlcss + '><span class=\"icon_href_link\"></span></td><td' + tdrcss + '><span class=\"HREF_VIEWER_LINK\" data-href=\"'
+      h += ah(i[j],'href') + '\">'
+      h += a(i[j], 'href') + '</span></td></tr>'
       j++
 
     h += '</table>'
@@ -176,12 +192,14 @@ chrome.extension.onMessage.addListener (request, sender) ->
 
     window.scrollTo 0, 0
     # hoverした画像にボーダー
-    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE img'), [ (e, i, a) ->
+    console.log('bbbbb')
+    Array::forEach.apply document.querySelectorAll('.ATT_VIEWER_TABLE .HREF_VIEWER_LINK'), [ (e, i, a) ->
+      console.log('eeee')
       e.addEventListener 'mouseover', ((event) ->
-        # console.log("mouseover", event.target.src);
-        filename_ex = event.target.src.match('.+/(.+?)([?#;].*)?$')[1]
+        filename_ex = event.target.getAttribute('data-href')
+        #filename_ex = event.target.href.match('.+/(.+?)([?#;].*)?$')[1]
         # elm = document.querySelector("[src$=\"" + filename_ex + "\"]")
-        elm = document.querySelector("[src*=\"" + filename_ex + "\"]") # ?ありの画像が処理出来ない
+        elm = document.querySelector("[href*=\"" + filename_ex + "\"]") # ?ありの画像が処理出来ない
         console.log elm
         if elm
           elm.style.border = "solid 3px #F82F66"
