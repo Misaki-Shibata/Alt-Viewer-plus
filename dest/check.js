@@ -97,7 +97,7 @@
       }
       r = document.createElement('div');
       rcss = 'padding:0px;position:fixed;top:0;right:0;border:solid #ccc 1px;z-index:2147483647;max-height:100%;overflow: auto;';
-      tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);\'';
+      tblcss = ' style=\'border-collapse:collapse;background:hsla(0,0%,0%,.75);width:auto;\'';
       tdlcss = ' style=\'padding:0 .5em 0 0;border-bottom:solid #fff 2px;text-align:right;\'';
       tdrcss = ' style=\'padding:0 0 0 1em;border-bottom:solid #fff 2px;text-align:left;background-color:hsla(0,0%,0%,.45);color:#F0EA30;width:250px;\'';
       r.id = rid;
